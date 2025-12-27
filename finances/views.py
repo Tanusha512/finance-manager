@@ -66,6 +66,10 @@ def add_transaction(request):
     
     return render(request, 'finances/add_transaction.html', {'form': form})
 
+@login_required
+def profile(request):
+    return render(request, 'registration/profile.html', {'user': request.user})
+
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)

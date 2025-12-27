@@ -1,0 +1,10 @@
+{% extends 'finances/base.html' %}
+
+{% block title %}Профиль{{ user.username }}{% endblock %}
+
+{% block content %}
+<h2>👤 Профиль</h2>
+<p>Имя: {{ user.username }}</p>
+<p>Email: {{ user.email }}</p>
+<a href="{% url 'logout' %}">Выйти</a>
+{% endblock %}
