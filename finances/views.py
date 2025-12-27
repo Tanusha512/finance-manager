@@ -1,14 +1,15 @@
 # finances/views.py
 from django.shortcuts import render, redirect
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
 from .models import Transaction, Category
 from .forms import TransactionForm
 from datetime import date, timedelta
 from collections import defaultdict
-
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 @login_required
 def transaction_list(request):
@@ -64,3 +65,15 @@ def add_transaction(request):
         form = TransactionForm()
     
     return render(request, 'finances/add_transaction.html', {'form': form})
+
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()  # ← создаёт пользователя
+            username = form.cleaned_data.get('username')
+            messages.success(request, f'Аккаунт {username} создан! Можете войти.')
+            return redirect('login')  # ← перенаправляет на /accounts/login/
+    else:
+        form = UserCreationForm()
+    return render(request, 'registration/register.html', {'form': form})
