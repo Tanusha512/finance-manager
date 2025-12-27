@@ -1,0 +1,60 @@
+{% extends 'finances/base.html' %}
+
+{% block title %}Мои транзакции{% endblock %}
+
+{% block content %}
+<div class="balance">
+    💰 Баланс: <strong>{{ balance|floatformat:2 }} ₽</strong>
+</div>
+<p>
+    📥 Доходы: {{ income|floatformat:2 }} ₽ |
+    📤 Расходы: {{ expense|floatformat:2 }} ₽ |
+    <a href="{% url 'finances:add_transaction' %}">➕ Добавить</a>
+</p>
+
+<div style="height: 300px; margin: 20px 0;">
+    <canvas id="balanceChart"></canvas>
+</div>
+
+<ul>
+{% for t in transactions %}
+    <li>{{ t.date }} — {{ t.category }}: {{ t.amount }} ₽</li>
+{% empty %}
+    <li>Нет транзакций</li>
+{% endfor %}
+</ul>
+
+{{ chart_data|json_script:"chart-data" }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const el = document.getElementById('chart-data');
+    if (!el) return;
+    const data = JSON.parse(el.textContent);
+    const canvas = document.getElementById('balanceChart');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: { 
+            labels: data.labels || ['Сегодня'],
+	    datasets: [{
+		label: 'Баланс',
+             	data: data.balance || [0],
+            	borderColor: '#000',
+            	tension: 0.3,
+            	fill: true
+            }],
+	},
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { 
+		legend: { display: false } 
+	    }
+        }
+    });
+});
+</script>
+{% endblock %}

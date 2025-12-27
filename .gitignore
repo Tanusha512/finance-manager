@@ -11,33 +11,33 @@ ENV/
 
 # Файлы зависимостей
 Pipfile.lock
-# ⚠️ Примечание: Pipfile.lock можно коммитить при командной разработке,
-# но если вы один — лучше игнорировать, особенно при разных ОС.
+# requirements.txt — НЕ игнорируем, коммитим!
 
 # =============== Django ===============
-# Локальная база данных SQLite (НИКОГДА не коммитить!)
+# Локальная БД (НИКОГДА не коммитим!)
 db.sqlite3
 db.sqlite3-journal
 
-# Загруженные пользователем файлы (аватары, чеки и т.д.)
+# Медиа и статика
 /media/
-
-# Статические файлы, собранные для продакшена (django collectstatic)
 /staticfiles/
+collectstatic_output/
 
-# Локальные настройки (секреты, отладка)
+# Локальные настройки и секреты
 local_settings.py
 .env
 .env.local
 *.env
+secrets.json
 
-# Логи
+# Логи и отладка
 *.log
+debug.log
 
 # =============== IDE / Редакторы ===============
 # VS Code
 .vscode/
-!.vscode/settings.json      # ← можно разрешить коммитить настройки форматирования
+!.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 
@@ -55,12 +55,22 @@ Desktop.ini
 $RECYCLE.BIN/
 *.lnk
 
-# =============== Прочее ===============
-# Резервные копии редакторов
-*~
-*.bak
-
-# Покрытие тестов
+# =============== Тестирование и покрытие ===============
 .coverage
 htmlcov/
 .pytest_cache/
+.tox/
+.coveragerc
+
+# =============== Прочее ===============
+# Резервные копии
+*~
+*.bak
+.*.swp
+.*.swo
+
+# Jupyter
+.ipynb_checkpoints/
+
+# mypy
+.mypy_cache/
